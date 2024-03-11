@@ -1,91 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>  <!-- Document type declaration -->
+<html lang="en">  <!-- Define language of the document -->
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chatbot UI</title>
+<meta charset="UTF-8">  <!-- Set character encoding -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- Configure viewport for responsive design -->
+<title>Chatbot UI</title>  <!-- Set title of the document -->
 <style>
     body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
+        font-family: Arial, sans-serif;  /* Set font family for the body */
+        margin: 0;  /* Remove default margin */
+        padding: 0;  /* Remove default padding */
     }
 
     .container {
-        width: 800px;
-        margin: 50px auto;
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 800px;  /* Set width of the container */
+        margin: 50px auto;  /* Center-align container horizontally with 50px top margin */
+        padding: 20px;  /* Add padding inside the container */
+        background-color: #f9f9f9;  /* Set background color of the container */
+        border-radius: 8px;  /* Add border radius to container */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  /* Add box shadow to container */
     }
 
     .message-container {
-        height: 300px;
-        overflow-y: auto;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #fff;
-        margin-bottom: 10px;
+        height: 300px;  /* Set height of message container */
+        overflow-y: auto;  /* Enable vertical scrolling for overflow */
+        padding: 10px;  /* Add padding inside message container */
+        border: 1px solid #ccc;  /* Add border around message container */
+        border-radius: 5px;  /* Add border radius to message container */
+        background-color: #fff;  /* Set background color of message container */
+        margin-bottom: 10px;  /* Add bottom margin to message container */
     }
 
     .message {
-        margin-bottom: 10px;
+        margin-bottom: 10px;  /* Add bottom margin to each message */
     }
 
     #input-container {
-        display: flex;
+        display: flex;  /* Use flexbox for input container */
     }
 
     #user-input {
-        flex: 1;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        flex: 1;  /* Take remaining space in the input container */
+        padding: 10px;  /* Add padding inside user input field */
+        border: 1px solid #ccc;  /* Add border around user input field */
+        border-radius: 5px;  /* Add border radius to user input field */
     }
 
     #send-button {
-        padding: 10px 20px;
-        margin-left: 10px;
-        border: none;
-        border-radius: 5px;
-        background-color: #007bff;
-        color: #fff;
-        cursor: pointer;
+        padding: 10px 20px;  /* Add padding to send button */
+        margin-left: 10px;  /* Add left margin to send button */
+        border: none;  /* Remove border from send button */
+        border-radius: 5px;  /* Add border radius to send button */
+        background-color: #007bff;  /* Set background color of send button */
+        color: #fff;  /* Set text color of send button */
+        cursor: pointer;  /* Change cursor to pointer on hover */
     }
 </style>
 </head>
 <body>
-<div class="container">
-    <div class="message-container" id="message-container"></div>
-    <div id="input-container">
-        <input type="text" id="user-input" placeholder="Enter your prompt...">
-        <button id="send-button">Send</button>
+<div class="container">  <!-- Container for chat UI -->
+    <div class="message-container" id="message-container"></div>  <!-- Container for displaying messages -->
+    <div id="input-container">  <!-- Container for user input -->
+        <input type="text" id="user-input" placeholder="Enter your prompt...">  <!-- Input field for user to enter prompts -->
+        <button id="send-button">Send</button>  <!-- Button to send user prompts -->
     </div>
 </div>
 
 <script>
-    const messageContainer = document.getElementById('message-container');
-    const userInput = document.getElementById('user-input');
-    const sendButton = document.getElementById('send-button');
+    const messageContainer = document.getElementById('message-container');  // Get message container element
+    const userInput = document.getElementById('user-input');  // Get user input field element
+    const sendButton = document.getElementById('send-button');  // Get send button element
 
-    function appendMessage(sender, message) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message');
-        messageDiv.innerHTML = `<strong>${sender}: </strong>${message}`;
-        messageContainer.appendChild(messageDiv);
-        messageContainer.scrollTop = messageContainer.scrollHeight;
+    function appendMessage(sender, message) {  // Function to append message to message container
+        const messageDiv = document.createElement('div');  // Create new message div element
+        messageDiv.classList.add('message');  // Add 'message' class to message div
+        messageDiv.innerHTML = `<strong>${sender}: </strong>${message}`;  // Set inner HTML of message div
+        messageContainer.appendChild(messageDiv);  // Append message div to message container
+        messageContainer.scrollTop = messageContainer.scrollHeight;  // Scroll message container to bottom
     }
 
-    sendButton.addEventListener('click', () => {
-        const prompt = userInput.value.trim();
-        if (prompt === '') return;
+    sendButton.addEventListener('click', () => {  // Add event listener for send button click
+        const prompt = userInput.value.trim();  // Get trimmed user input prompt
+        if (prompt === '') return;  // If prompt is empty, exit function
 
-        appendMessage('User', prompt);
-        userInput.value = '';
+        appendMessage('User', prompt);  // Append user prompt to message container
+        userInput.value = '';  // Clear user input field
 
-        if (prompt.toLowerCase() === 'quit') {
+        if (prompt.toLowerCase() === 'quit') {  // If prompt is 'quit'
             // Redirect to exit page
             window.location.href = '/exit';
             return;
@@ -93,24 +93,24 @@
 
         // Send a POST request to the chatbot endpoint
         fetch('/api/chatbot', {
-            method: 'POST',
+            method: 'POST',  // Set request method to POST
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json'  // Set request header for JSON data
             },
-            body: JSON.stringify({ prompt: prompt })
+            body: JSON.stringify({ prompt: prompt })  // Convert prompt to JSON string and send as request body
         })
-        .then(response => response.json())
+        .then(response => response.json())  // Parse response JSON data
         .then(data => {
-            appendMessage('Chatbot', data.response);
+            appendMessage('Chatbot', data.response);  // Append chatbot response to message container
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error:', error);  // Log any errors to the console
         });
     });
 
-    userInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            sendButton.click();
+    userInput.addEventListener('keydown', (event) => {  // Add event listener for user input field keydown
+        if (event.key === 'Enter') {  // If Enter key is pressed
+            sendButton.click();  // Simulate click on send button
         }
     });
 </script>
