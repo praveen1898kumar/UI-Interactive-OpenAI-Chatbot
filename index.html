@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot UI</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-container {
+        height: 300px;
+        overflow-y: auto;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        margin-bottom: 10px;
+    }
+
+    .message {
+        margin-bottom: 10px;
+    }
+
+    #input-container {
+        display: flex;
+    }
+
+    #user-input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    #send-button {
+        padding: 10px 20px;
+        margin-left: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="message-container" id="message-container"></div>
+    <div id="input-container">
+        <input type="text" id="user-input" placeholder="Enter your prompt...">
+        <button id="send-button">Send</button>
+    </div>
+</div>
+
+<script>
+    const messageContainer = document.getElementById('message-container');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+
+    function appendMessage(sender, message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        messageDiv.innerHTML = `<strong>${sender}: </strong>${message}`;
+        messageContainer.appendChild(messageDiv);
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
+
+    sendButton.addEventListener('click', () => {
+        const prompt = userInput.value.trim();
+        if (prompt === '') return;
+
+        appendMessage('User', prompt);
+        userInput.value = '';
+
+        if (prompt.toLowerCase() === 'quit') {
+            // Redirect to exit page
+            window.location.href = '/exit';
+            return;
+        }
+
+        // Send a POST request to the chatbot endpoint
+        fetch('/api/chatbot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ prompt: prompt })
+        })
+        .then(response => response.json())
+        .then(data => {
+            appendMessage('Chatbot', data.response);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    userInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            sendButton.click();
+        }
+    });
+</script>
+</body>
+</html>
