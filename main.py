@@ -4,7 +4,7 @@ import openai
 import os
 
 # Set up your OpenAI API key
-openai.api_key = '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'
+openai.api_key = '<open-ai-api-key>'
 
 class ChatbotRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
